@@ -1,0 +1,1970 @@
+/* ─── Reset ────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #07070f;
+  --pink: #ff2d78;
+  --cyan: #00e5ff;
+  --text: #e2e2f0;
+  --dim: #555;
+  --dim2: #888;
+  --card-bg: #0c0c1a;
+  --border-cyan: rgba(0, 229, 255, 0.18);
+  --border-pink: rgba(255, 45, 120, 0.3);
+  --font-mono: 'Space Mono', 'Courier New', monospace;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ─── Deck & slides ────────────────────────────────── */
+#deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#slides-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 80px;
+  overflow: hidden; /* contiene glows/imágenes que rompen el padding */
+}
+
+/* ─── HUD ──────────────────────────────────────────── */
+#progress {
+  position: fixed;
+  bottom: 24px;
+  right: 28px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+  z-index: 100;
+  opacity: 0.55;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+#nav-hint {
+  position: fixed;
+  bottom: 24px;
+  left: 28px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+  z-index: 100;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+/* ─── Typography ───────────────────────────────────── */
+.slide-label {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.2vw, 16px);
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 24px;
+  opacity: 1;
+}
+
+/* Label grande para el hero — resiste el fondo de pipes */
+.event-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(13px, 1.4vw, 18px);
+  color: var(--pink);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin-bottom: 28px;
+  padding: 6px 14px 6px 10px;
+  border-left: 3px solid var(--pink);
+  background: rgba(255, 45, 120, 0.08);
+}
+
+/* ─── Slide 1 wrapper (posiciona label y Mona absolutas) ── */
+.s1-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Label flotante arriba izquierda */
+.event-label-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(18px, 2vw, 28px);
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  padding: 12px 24px 12px 16px;
+  border-left: 5px solid var(--cyan);
+  background: rgba(0, 229, 255, 0.07);
+}
+
+/* Mona + GitHub: esquina inferior derecha */
+.mona-github-tag {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.mona-wave {
+  width: 150px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+.mona-github-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan);
+  opacity: 0.55;
+  letter-spacing: 3px;
+  text-transform: lowercase;
+}
+
+.slide-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 68px);
+  color: #fff;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.accent-pink { color: var(--pink); }
+.accent-cyan  { color: var(--cyan); }
+
+.slide-subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.6vw, 19px);
+  color: var(--cyan);
+  margin-bottom: 40px;
+  opacity: 0.8;
+}
+
+/* ─── Blink cursor ─────────────────────────────────── */
+.cursor {
+  display: inline-block;
+  width: 9px;
+  height: 1em;
+  background: var(--cyan);
+  vertical-align: text-bottom;
+  margin-left: 3px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── Pipe background: slide content always above SVG ─ */
+.slide > div {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Slide images ─────────────────────────────────── */
+.slide-img-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.slide-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated; /* preserva pixel art nítido */
+}
+
+/* ─── Image placeholder ────────────────────────────── */
+.img-placeholder {
+  border: 2px dashed rgba(0, 229, 255, 0.2);
+  background: rgba(0, 229, 255, 0.015);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(0, 229, 255, 0.28);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.ph-box {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(0, 229, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  opacity: 0.4;
+}
+
+/* ─── Code block ───────────────────────────────────── */
+.code-block {
+  background: #000;
+  border: 1px solid rgba(0, 229, 255, 0.12);
+  border-left: 3px solid var(--cyan);
+  padding: 24px 28px;
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1vw, 14px);
+  line-height: 2;
+  color: #8a8a9e;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.kw   { color: var(--pink); }
+.fn   { color: var(--cyan); }
+.str  { color: #a8e6a3; }
+.cm   { color: #3a3a52; }
+.num  { color: #ffb347; }
+.punc { color: #444; }
+.var  { color: #c9a0ff; }
+
+/* ─── Bullet list ──────────────────────────────────── */
+.bullet-list {
+  list-style: none;
+  padding: 0;
+}
+
+.bullet-list li {
+  padding: 11px 0 11px 28px;
+  position: relative;
+  font-size: clamp(13px, 1.3vw, 17px);
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+
+.bullet-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--pink);
+  font-family: var(--font-mono);
+}
+
+/* ─── Security cards ───────────────────────────────── */
+.sec-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 45, 120, 0.12);
+  padding: 18px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.sec-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sec-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  line-height: 1;
+}
+
+.sec-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--pink);
+  margin-bottom: 5px;
+}
+
+.sec-text {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.7;
+  line-height: 1.55;
+}
+
+/* ─── Use case grid ────────────────────────────────── */
+.usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.usecase-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-cyan);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.usecase-icon {
+  font-size: 26px;
+  line-height: 1;
+  image-rendering: pixelated;
+}
+
+.usecase-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.usecase-desc {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.6;
+  line-height: 1.5;
+}
+
+/* ─── Act cards ────────────────────────────────────── */
+.acts-row {
+  display: flex;
+  gap: 18px;
+  width: 100%;
+}
+
+.act-card {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border-cyan);
+  padding: 26px 22px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.act-card.in {
+  animation: fadeUp 0.35s ease forwards;
+}
+
+.act-card:nth-child(1).in { animation-delay: 0.05s; }
+.act-card:nth-child(2).in { animation-delay: 0.18s; }
+.act-card:nth-child(3).in { animation-delay: 0.31s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.act-num {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(0, 229, 255, 0.2);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.act-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+
+.act-step {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--pink);
+  margin-bottom: 14px;
+  opacity: 0.9;
+}
+
+.act-desc {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.65;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.act-cmd {
+  display: block;
+  background: #000;
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  word-break: break-all;
+}
+
+.act-cmd.ok {
+  color: #a8e6a3;
+  border-color: rgba(168, 230, 163, 0.25);
+}
+
+/* ─── CTA / Slide 7 ────────────────────────────────── */
+.cta-cmd-wrapper {
+  display: flex;
+  align-items: stretch;
+  margin: 28px 0 32px;
+  background: #000;
+  border: 1px solid var(--border-cyan);
+  max-width: 580px;
+}
+
+.cta-cmd {
+  flex: 1;
+  padding: 15px 18px;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.1vw, 14px);
+  color: var(--cyan);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.prompt-char { color: var(--dim2); }
+
+.copy-btn {
+  padding: 15px 18px;
+  background: rgba(255, 45, 120, 0.08);
+  border: none;
+  border-left: 1px solid var(--border-pink);
+  color: var(--pink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 45, 120, 0.18);
+}
+
+.copy-btn.copied {
+  color: #a8e6a3;
+  background: rgba(168, 230, 163, 0.08);
+  border-left-color: rgba(168, 230, 163, 0.25);
+}
+
+.cta-links {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 2.2;
+}
+
+.cta-lnk { color: var(--cyan); opacity: 0.8; }
+
+/* ─── Hero title (slide 1) ─────────────────────────── */
+.hero-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(46px, 7vw, 92px);
+  line-height: 1.05;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+
+.hero-desc {
+  font-family: var(--font-mono);
+  font-size: clamp(22px, 3vw, 40px);
+  color: #fff;
+  opacity: 1;
+  line-height: 1.5;
+  margin-bottom: 52px;
+  border-left: 4px solid var(--cyan);
+  padding-left: 20px;
+}
+
+/* ─── Photo frame (slide 1) ────────────────────────── */
+.photo-frame {
+  position: relative;
+  width: 380px;
+  padding: 30px;
+}
+
+.photo-inner {
+  border: 2px solid var(--pink);
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--card-bg);
+}
+
+.speaker-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Esquinas con pipe-codo rotado */
+.corner {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.corner-tl { top: 0;    left: 0;   transform: scaleX(-1);     } /* ┌ */
+.corner-tr { top: 0;    right: 0;  transform: rotate(0deg);  } /* ┐ */
+.corner-bl { bottom: 0; left: 0;   transform: rotate(180deg);} /* └ */
+.corner-br { bottom: 0; right: 0;  transform: scaleY(-1);    } /* ┘ */
+
+/* ─── Slide 2 — ¿Qué son? ──────────────────────────── */
+.qs-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qs-content {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.qs-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(38px, 5.5vw, 72px);
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.qs-comment {
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 2vw, 26px);
+  color: var(--cyan);
+  opacity: 0.75;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qs-pipe-chr {
+  color: var(--cyan);
+  opacity: 0.9;
+  font-size: 1.1em;
+}
+
+/* ── Cards ───────────────────────── */
+.qs-cards-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.qs-card {
+  flex: 1;
+  background: #0a0a1e;
+  border: 1px solid transparent;
+  padding: 32px 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.22s ease-out, transform 0.22s ease-out;
+}
+
+.qs-card.visible { opacity: 1; transform: translateY(0); }
+
+.qs-card--cyan { border-color: var(--cyan); }
+.qs-card--pink { border-color: var(--pink); }
+
+.qs-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qs-card-pipe {
+  font-family: var(--font-mono);
+  font-size: 38px;
+  color: var(--cyan);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.qs-card-icon {
+  font-size: 38px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.qs-card-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1;
+}
+
+.qs-card-body {
+  font-family: var(--font-body);
+  font-size: clamp(17px, 1.8vw, 24px);
+  color: var(--text);
+  opacity: 0.85;
+  line-height: 1.65;
+  padding-left: 36px;
+}
+
+.qs-card-tag {
+  margin-top: auto;
+  padding-left: 32px;
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.1vw, 15px);
+  color: var(--cyan);
+  border-left: 2px solid var(--cyan);
+  padding-left: 8px;
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+/* Conector pipe.png entre cards */
+.qs-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 80px;
+  opacity: 0;
+  transition: opacity 0.22s ease-out;
+}
+
+.qs-connector.visible {
+  opacity: 1;
+}
+
+.pipe-connector {
+  width: 60px;
+  height: auto;
+  transform: rotate(25deg); /* corrige la inclinación isométrica del PNG */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  opacity: 0.55;
+}
+
+/* ── Strip de agentes (4° reveal) ── */
+.qs-agents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.22s ease-out, transform 0.22s ease-out;
+  border-top: 1px solid rgba(0, 229, 255, 0.12);
+  padding-top: 16px;
+}
+
+.qs-agents.visible { opacity: 1; transform: translateY(0); }
+
+.qs-agents-label {
+  font-family: var(--font-mono);
+  font-size: clamp(17px, 1.6vw, 22px);
+  color: var(--cyan);
+  opacity: 0.75;
+  letter-spacing: 3px;
+}
+
+.qs-agents-list {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.qs-agent {
+  font-family: var(--font-mono);
+  font-size: clamp(17px, 1.8vw, 24px);
+  color: var(--cyan);
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 22px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.qs-agent-sep {
+  font-family: var(--font-mono);
+  font-size: 21px;
+  color: var(--dim);
+  opacity: 0.5;
+  user-select: none;
+}
+
+/* Mona bottom-right */
+.qs-mona {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.mona-slide {
+  width: 100px;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ─── Slide 3 — Traditional vs Agentic ─────────────── */
+.s3-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+
+/* Título dramático — padding-right deja hueco para Mona */
+.s3-question {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(26px, 3.8vw, 48px);
+  line-height: 1.2;
+  color: #fff;
+  padding-right: 110px;
+}
+
+/* Tabla — oculta hasta keypress */
+.vs-block {
+  display: none;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.vs-block.visible { opacity: 1; }
+
+.vs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  background: #080814;
+  border: 1px solid rgba(0, 229, 255, 0.15);
+}
+
+/* ── Header ── */
+.vs-table thead tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vs-table thead th {
+  padding: 10px 20px 18px;
+  text-align: left;
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 22px);
+  vertical-align: bottom;
+}
+
+.vs-th-feat-header {
+  color: var(--dim2);
+  font-size: clamp(13px, 1.1vw, 15px);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 400;
+  vertical-align: bottom;
+  padding-bottom: 18px;
+}
+
+.vs-th-trad {
+  color: #ccc;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+}
+
+.vs-th-agent {
+  color: var(--cyan);
+  border-left: 1px solid rgba(0, 229, 255, 0.4);
+  position: relative;
+}
+
+/* Punto conector en header */
+.vs-col-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  margin-bottom: 10px;
+}
+
+.vs-col-dot--cyan { background: var(--cyan); }
+
+/* ── Filas ── */
+.vs-row {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.vs-row.visible { opacity: 1; transform: translateX(0); }
+
+/* Base de cada fila más oscura */
+.vs-row         { background: #0b0b1c; }
+.vs-row--alt    { background: #0e0e22; }
+
+/* ── Celdas ── */
+.vs-table td {
+  padding: 20px;
+  font-size: clamp(16px, 1.6vw, 21px);
+  line-height: 1.4;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Ícono circular con imagen */
+.vs-icon-cell {
+  width: 64px;
+  padding: 12px 10px 12px 0;
+}
+
+.vs-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.vs-icon--pink { background: var(--pink); }
+.vs-icon--cyan { background: var(--cyan); }
+
+.vs-icon-img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* Columna feature */
+.vs-feat {
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(15px, 1.4vw, 19px);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  width: 14%;
+}
+
+/* Columna tradicional */
+.vs-trad {
+  color: #ddd;
+  width: 35%;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  padding-left: 24px;
+}
+
+/* Columna agentic */
+.vs-agent {
+  color: var(--cyan);
+  width: 40%;
+  font-weight: 700;
+  border-left: 1px solid rgba(0, 229, 255, 0.4);
+  background: rgba(0, 229, 255, 0.07);
+  padding-left: 24px;
+}
+
+.vs-check {
+  color: var(--pink);
+  margin-right: 8px;
+  font-weight: 700;
+  font-size: 1.15em;
+}
+
+/* Fila con puntos inferiores */
+tfoot .vs-tfoot-dot {
+  padding: 10px 20px 4px;
+  border-top: none;
+}
+
+tfoot .vs-tfoot-dot:first-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+tfoot .vs-tfoot-dot:last-child {
+  border-left: 1px solid rgba(0, 229, 255, 0.4);
+}
+
+/* Pipe codo: arriba-izquierda (lejos de Mona) */
+.s3-pipe-tl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 54px;
+  opacity: 0.35;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform: scaleX(-1); /* ┌ */
+}
+
+/* Mona: arriba-derecha, sin solapar el pipe */
+.s3-mona {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.s3-mona .mona-slide {
+  width: 88px;
+  opacity: 0.9;
+}
+
+/* ─── Slide 4 — Cómo funciona ──────────────────────── */
+.s4-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.s4-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(26px, 3.8vw, 48px);
+  line-height: 1.15;
+  color: #fff;
+}
+
+/* Requisitos estilo terminal — overlay absoluto, no afecta la imagen */
+.s4-reqs-term {
+  position: absolute;
+  top: clamp(120px, 18vh, 180px);
+  left: 0;
+  z-index: 5;
+  width: clamp(360px, 38vw, 520px);
+  background: #000;
+  border: 3px solid var(--cyan);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
+}
+
+.s4-reqs-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  background: #0c0c1a;
+  border-bottom: 2px solid #021a22;
+}
+
+.term-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dim);
+  display: inline-block;
+}
+
+.term-dot--pink { background: var(--pink); }
+.term-dot--cyan { background: var(--cyan); }
+
+.s4-reqs-term-title {
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--dim2);
+  letter-spacing: 1px;
+}
+
+.s4-reqs-term-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.s4-req-line {
+  font-family: var(--font-mono);
+  font-size: clamp(15px, 1.5vw, 20px);
+  color: #fff;
+  line-height: 1.3;
+}
+
+.term-prompt {
+  color: var(--pink);
+  margin-right: 10px;
+  font-weight: 700;
+}
+
+/* Imagen — rompe el padding del slide para ocupar más pantalla */
+.s4-right {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  margin-left: -80px;
+  margin-right: -80px;
+  margin-bottom: -56px;
+}
+
+.flow-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.flow-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.flow-img--visible { opacity: 1; }
+
+/* Nubes cyan detrás de la imagen — hacen legible el texto negro */
+.flow-cloud {
+  position: absolute;
+  z-index: 0;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 229, 255, 0.95) 0%,
+    rgba(0, 229, 255, 0.70) 40%,
+    rgba(0, 229, 255, 0) 72%
+  );
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+/* Mona */
+.s4-mona {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* ─── Slide 5 — ¿Y la seguridad? ───────────────────── */
+.sec5-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Izquierda más estrecha — deja protagonismo a la imagen */
+.sec5-left {
+  flex: 0 0 36%;
+  min-width: 0;
+  align-self: flex-start;     /* sube título y cards */
+  padding-top: 2px;
+}
+
+/* Derecha mucho más ancha + rompe el padding del slide */
+.sec5-right {
+  flex: 1;
+  min-width: 0;
+  margin-right: -80px;
+  margin-top: -56px;
+  margin-bottom: -56px;
+}
+
+/* Columna izquierda */
+.sec5-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(38px, 5vw, 70px);
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.sec5-comment {
+  font-family: var(--font-mono);
+  font-size: clamp(16px, 1.6vw, 21px);
+  color: var(--cyan);
+  opacity: 0.85;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+.sec5-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sec5-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sec5-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sec5-badge {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(17px, 1.7vw, 22px);
+  color: var(--cyan);
+  border: 2px solid rgba(0, 229, 255, 0.5);
+  background: rgba(0, 229, 255, 0.08);
+}
+
+.sec5-badge--hl {
+  color: var(--pink);
+  border-color: rgba(255, 45, 120, 0.6);
+  background: rgba(255, 45, 120, 0.1);
+}
+
+.sec5-item-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(19px, 1.9vw, 26px);
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.sec5-item-desc {
+  font-family: var(--font-mono);
+  font-size: clamp(15px, 1.4vw, 19px);
+  color: #b8b8c8;
+  line-height: 1.35;
+}
+
+/* Item destacado (Human in the loop) */
+.sec5-item--hl .sec5-item-title { color: var(--pink); }
+
+.sec5-closing {
+  margin-top: 26px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: var(--cyan);
+  letter-spacing: 1px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.sec5-closing.visible { opacity: 1; }
+
+/* Columna derecha: imagen + pulse */
+.sec5-right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sec5-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sombra/glow cyan detrás de la imagen */
+.sec5-img-wrap::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 229, 255, 0.6) 0%,
+    rgba(0, 229, 255, 0.72) 55%,
+    rgba(0, 229, 255, 0.65) 80%,
+    rgba(0, 229, 255, 0) 100%
+  );
+  filter: blur(55px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sec5-img {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Overlay de pulse de brillo */
+.sec5-pulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: inset 0 0 40px rgba(0, 229, 255, 0.3);
+}
+
+.sec5-pulse.pulsing {
+  animation: sec5Pulse 0.6s ease-out;
+}
+
+@keyframes sec5Pulse {
+  0%   { opacity: 0; }
+  40%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── Slide 6 — Casos de uso ───────────────────────── */
+.uc-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+/* ── Header: pregunta + spoiler ── */
+.uc-header {
+  margin-bottom: 36px;
+}
+
+.uc-m1-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(27px, 3.6vw, 50px);
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.uc-m1-sub {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(17px, 1.8vw, 23px);
+  color: var(--cyan);
+  letter-spacing: 1px;
+}
+
+/* ── Comparativa 2 columnas ── */
+.uc-compare {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0;
+}
+
+.uc-col-block {
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.uc-col-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 21px);
+  color: var(--dim2);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 28px;
+  white-space: nowrap;
+}
+
+.uc-col-title--cyan { color: var(--cyan); }
+
+.uc-rows {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Fila grande — min 48px */
+.uc-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.015);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition-delay: var(--d);
+}
+
+.uc-row.visible { opacity: 1; transform: translateX(0); }
+
+.uc-row--agentic {
+  border-color: rgba(0, 229, 255, 0.22);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.uc-row-mark {
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 20px);
+  flex-shrink: 0;
+}
+
+.uc-row-mark--cyan { color: var(--cyan); }
+
+.uc-row-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex-shrink: 0;
+}
+
+.uc-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.uc-row-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(18px, 1.9vw, 23px);
+  color: #fff;
+  line-height: 1.2;
+}
+
+.uc-row-title--cyan { color: var(--cyan); }
+
+.uc-row-desc {
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 1.3vw, 17px);
+  color: #9a9aae;
+  line-height: 1.3;
+}
+
+/* Separador central con pipe-t */
+.uc-sep {
+  flex: 0 0 10%;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.uc-sep::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  width: 1px;
+  background: var(--dim);
+  opacity: 0.4;
+}
+
+.uc-sep-pipe {
+  width: 60px;
+  position: relative;
+  z-index: 1;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Línea de cierre */
+.uc-closing {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 700;
+  color: var(--cyan);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  white-space: nowrap;
+}
+
+.uc-closing.visible { opacity: 1; }
+
+/* Pipes decorativos */
+.uc-pipe-tr {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 54px;
+  opacity: 0.25;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.uc-pipe-bl {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 72px;
+  opacity: 0.2;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Mona */
+.uc-mona {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* ─── Slide 7 — Demo (video + controles) ───────────── */
+.demo-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.demo-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 40px);
+  color: #fff;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.slide-label + .demo-title { margin-top: 4px; }
+
+.demo-subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: var(--cyan);
+  opacity: 0.75;
+  letter-spacing: 1px;
+  align-self: flex-start;
+  margin-top: -6px;
+}
+
+/* El label vuelve a su posición arriba-izquierda */
+.demo-wrapper > .slide-label {
+  align-self: flex-start;
+}
+
+/* Contenedor del video — 80% del ancho */
+.demo-video-wrap {
+  position: relative;
+  width: 80%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  background: #000;
+  cursor: pointer;
+}
+
+/* Foto final — overlay sobre el video cuando termina */
+.demo-endcard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.demo-endcard.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Barra de controles */
+.demo-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.demo-btn {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 20px);
+  color: var(--cyan);
+  background: transparent;
+  border: 2px solid var(--cyan);
+  border-radius: 8px;
+  padding: 10px 20px;
+  min-width: 64px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.demo-btn:hover {
+  background: rgba(0, 229, 255, 0.08);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.5);
+}
+
+.demo-btn--play {
+  font-size: clamp(18px, 1.8vw, 24px);
+  padding: 10px 26px;
+  border-color: var(--pink);
+  color: var(--pink);
+}
+
+.demo-btn--play:hover {
+  background: rgba(255, 45, 120, 0.08);
+  box-shadow: 0 0 16px rgba(255, 45, 120, 0.5);
+}
+
+.demo-foot {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: var(--dim2);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* ─── Slide 8 — Recursos + cierre ──────────────────── */
+.rs-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.rs-wrapper > .slide-label { align-self: flex-start; }
+
+/* Header */
+.rs-header {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.rs-header.in { opacity: 1; transform: translateY(0); }
+
+.rs-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(26px, 3vw, 40px);
+  color: #fff;
+}
+
+.rs-sub {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.3vw, 17px);
+  color: var(--dim2);
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+/* Fila 1: repos con QR */
+.rs-repos {
+  display: flex;
+  gap: 56px;
+  justify-content: center;
+}
+
+.rs-repo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  transition-delay: var(--d, 0ms);
+}
+.rs-repo.in { opacity: 1; transform: translateY(0); }
+
+.rs-repo-head { text-align: center; }
+
+.rs-repo-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 21px);
+}
+
+.rs-repo-sub {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: var(--dim2);
+  margin-top: 2px;
+}
+
+/* Marco del QR con pipe-codo en las esquinas */
+.rs-qr-frame {
+  position: relative;
+  padding: 18px;
+}
+
+/* Esquinas más pequeñas que las del slide 1 */
+.rs-qr-frame .corner {
+  width: 32px;
+  height: 32px;
+}
+
+.rs-qr {
+  width: 150px;
+  height: 150px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rs-qr img,
+.rs-qr canvas {
+  display: block;
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.rs-repo-url {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1vw, 12px);
+  color: #b8b8c8;
+  word-break: break-all;
+  max-width: 200px;
+  text-align: center;
+}
+
+/* Fila 2: recursos */
+.rs-resources {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.rs-res-head {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: var(--dim2);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.rs-res-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.rs-res-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(0, 229, 255, 0.04);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.15s;
+  transition-delay: var(--d, 0ms);
+}
+.rs-res-card.in { opacity: 1; transform: translateY(0); }
+.rs-res-card:hover { background: rgba(0, 229, 255, 0.1); }
+
+.rs-res-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  color: var(--cyan);
+}
+
+.rs-res-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rs-res-label {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.2vw, 15px);
+  color: #eee;
+  line-height: 1.25;
+}
+
+.rs-res-link {
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1vw, 13px);
+  color: var(--cyan);
+  word-break: break-all;
+}
+
+/* Footer */
+.rs-footer {
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.rs-footer.in { opacity: 1; transform: scale(1); }
+
+.rs-closing {
+  font-family: var(--font-mono);
+  font-size: clamp(16px, 1.8vw, 24px);
+  line-height: 1.4;
+}
+.rs-closing-1 { color: var(--text); }
+.rs-closing-2 { color: #fff; font-weight: 700; }
+
+.rs-thanks {
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1.1vw, 13px);
+  color: var(--dim2);
+  margin-top: 12px;
+  letter-spacing: 1px;
+}
+
+/* Mona idle bobbing */
+.rs-mona {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.rs-mona-img {
+  width: 120px;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  animation: rsMonaBob 2.4s ease-in-out infinite;
+}
+
+@keyframes rsMonaBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+/* ─── Layouts ───────────────────────────────────────── */
+
+/* Slide 1 – Hero */
+.hero-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  gap: 100px;
+}
+
+.hero-left  { flex: 1; }
+.hero-right { flex-shrink: 0; }
+
+.hero-speaker {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 48px;
+}
+
+.hero-name {
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  color: #fff;
+}
+
+.hero-role {
+  font-family: var(--font-mono);
+  font-size: clamp(16px, 1.8vw, 23px);
+  color: var(--pink);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Slide 2 – Ice breaker */
+.icebreaker-layout {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  width: 100%;
+  max-width: 1120px;
+}
+
+.terminal-output {
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 1.5vw, 19px);
+  line-height: 2.3;
+  color: var(--text);
+  min-height: 180px;
+}
+
+.terminal-line {
+  display: block;
+  opacity: 0;
+  transition: opacity 0.08s ease;
+}
+
+.terminal-line.visible { opacity: 1; }
+
+/* Slide 3 – Two col */
+.two-col {
+  display: flex;
+  gap: 52px;
+  width: 100%;
+  max-width: 1120px;
+  align-items: flex-start;
+}
+
+.col-left  { flex: 1; min-width: 0; }
+.col-right { flex: 1; min-width: 0; }
+
+/* Slide 4 – Security */
+.security-layout {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+  max-width: 1120px;
+}
+
+.sec-cards-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Slide 7 – Close */
+.close-layout {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  width: 100%;
+  max-width: 1120px;
+}
+
+.close-left  { flex: 1; }
+.close-right { flex-shrink: 0; }
