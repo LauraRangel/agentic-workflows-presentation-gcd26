@@ -159,6 +159,26 @@ function navigate(dir, source) {
   }, ANIM);
 }
 
+// ─── Fullscreen ──────────────────────────────────────
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
+}
+
+document.getElementById('fs-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleFullscreen();
+});
+
+// Oculta el botón cuando ya está en fullscreen
+document.addEventListener('fullscreenchange', () => {
+  const btn = document.getElementById('fs-btn');
+  if (btn) btn.style.opacity = document.fullscreenElement ? '0' : '1';
+});
+
 // ─── Input events ────────────────────────────────────
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') {
@@ -170,6 +190,8 @@ document.addEventListener('keydown', (e) => {
   } else if (e.key === 'ArrowLeft') {
     e.preventDefault();
     navigate(-1, 'arrow');
+  } else if (e.key === 'f' || e.key === 'F') {
+    toggleFullscreen();
   }
 });
 
