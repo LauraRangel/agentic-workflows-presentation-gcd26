@@ -6,7 +6,7 @@ const REPOS = [
     id: 'demo',
     title: 'Repo demo',
     sub: 'clónalo y pruébalo',
-    url: 'https://github.com/LauraRangel/demo-jira-flow-aw',
+    qr: 'assets/demo-jira.png',
     short: 'github.com/LauraRangel/demo-jira-flow-aw',
     accent: 'pink',
   },
@@ -14,7 +14,7 @@ const REPOS = [
     id: 'pres',
     title: 'Esta presentación',
     sub: 'el código de estos slides',
-    url: 'https://github.com/LauraRangel/agentic-workflows-presentation-gcd26',
+    qr: 'assets/presentacion-qr.png',
     short: 'github.com/LauraRangel/agentic-workflows-presentation-gcd26',
     accent: 'cyan',
   },
@@ -39,7 +39,9 @@ export default {
           <img src="assets/pipe-codo.png" class="corner corner-tr" alt="" />
           <img src="assets/pipe-codo.png" class="corner corner-bl" alt="" />
           <img src="assets/pipe-codo.png" class="corner corner-br" alt="" />
-          <div class="rs-qr" id="rs-qr-${r.id}" data-url="${r.url}"></div>
+          <div class="rs-qr" id="rs-qr-${r.id}">
+            <img src="${r.qr}" alt="QR ${r.title}" />
+          </div>
         </div>
         <div class="rs-repo-url">${r.short}</div>
       </div>
@@ -93,23 +95,6 @@ export default {
   },
 
   setup(el) {
-    // Genera los QR una sola vez (si la lib está disponible y no existen aún)
-    REPOS.forEach((r) => {
-      const box = el.querySelector(`#rs-qr-${r.id}`);
-      if (!box) return;
-      if (box.childElementCount > 0) return; // ya generado
-      if (typeof QRCode === 'undefined') return; // lib no cargó
-
-      new QRCode(box, {
-        text: r.url,
-        width: 220,
-        height: 220,
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.L,
-      });
-    });
-
     // Re-trigger de animaciones de entrada
     el.querySelector('#rs-header')?.classList.remove('in');
     el.querySelectorAll('.rs-repo, .rs-res-card').forEach(n => n.classList.remove('in'));
