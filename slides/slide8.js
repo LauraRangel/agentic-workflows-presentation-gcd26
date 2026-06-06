@@ -102,11 +102,11 @@ export default {
 
       new QRCode(box, {
         text: r.url,
-        width: 150,
-        height: 150,
-        colorDark: '#07070f',
+        width: 220,
+        height: 220,
+        colorDark: '#000000',
         colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M,
+        correctLevel: QRCode.CorrectLevel.L,
       });
     });
 
