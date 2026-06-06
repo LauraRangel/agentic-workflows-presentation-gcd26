@@ -6,10 +6,11 @@ import slide5 from './slides/slide5.js';
 import slide6 from './slides/slide6.js';
 import slide7 from './slides/slide7.js';
 import slide8 from './slides/slide8.js';
+import slide9 from './slides/slide9.js';
 
-const MODS  = [slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8];
+const MODS  = [slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8, slide9];
 const TOTAL = MODS.length;
-const DISPLAY_TOTAL = TOTAL; // ahora hay 8 slides reales
+const DISPLAY_TOTAL = TOTAL; // ahora hay 9 slides reales
 const ANIM  = 380; // ms
 
 // ─── Decorative pipe background (injected into every slide) ──
@@ -167,6 +168,11 @@ function toggleFullscreen() {
     document.exitFullscreen().catch(() => {});
   }
 }
+
+document.getElementById('back-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  navigate(-1, 'click');
+});
 
 document.getElementById('fs-btn').addEventListener('click', (e) => {
   e.stopPropagation();

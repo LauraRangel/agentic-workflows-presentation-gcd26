@@ -23,7 +23,7 @@ const REPOS = [
 const RESOURCES = [
   { icon: '📖', link: 'https://github.github.com/gh-aw',              label: 'Docs oficiales de Agentic Workflows', text: 'github.github.com/gh-aw' },
   { icon: '▶',  link: 'https://youtube.com/watch?v=TBVtoHrhFG4',       label: 'GitHub Agentic Workflows en acción',  text: 'youtube.com/watch?v=TBVtoHrhFG4' },
-  { icon: '▶',  link: 'https://youtube.com/watch?v=kaIz0X_YByE',       label: 'Demo y casos de uso',                 text: 'youtube.com/watch?v=kaIz0X_YByE' },
+  { icon: '▶',  link: 'https://youtube.com/watch?v=kaIz0X_YByE',       label: 'Casos de uso',                        text: 'youtube.com/watch?v=kaIz0X_YByE' },
 ];
 
 export default {
